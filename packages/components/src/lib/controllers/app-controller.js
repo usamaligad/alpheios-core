@@ -670,6 +670,7 @@ export default class AppController {
       Logger.getInstance().error(err)
     }
     this.updateLemmaTranslations()
+    this.updateCurrentLocale()
     this.isInitialized = true
     return this
   }
@@ -1055,6 +1056,12 @@ export default class AppController {
     }
   }
 
+  updateCurrentLocale() {
+    if (this.api.settings.getFeatureOptions().items.locale.currentValue) {
+      this.api.l10n.setLocale(this.api.settings.getFeatureOptions().items.locale.currentValue)
+    }
+  }
+
   updateWordUsageExamples (wordUsageExamplesData) {
     this._store.commit('ui/addMessage', this.api.l10n.getMsg('TEXT_NOTICE_WORDUSAGE_READY'))
     this.api.app.wordUsageExamples = wordUsageExamplesData
@@ -1317,6 +1324,7 @@ export default class AppController {
     switch (settingName) {
       case 'locale':
         this.updateLemmaTranslations()
+        this.updateCurrentLocale()
         break
       case 'preferredLanguage':
         this.updateLanguage(this.api.settings.getFeatureOptions().items.preferredLanguage.currentValue)
